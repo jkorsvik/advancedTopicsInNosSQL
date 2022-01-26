@@ -94,7 +94,7 @@ select author, title, pos from authors_publis where author='Oscar Castillo';
 select distinct(author) from author_publis inner join (select author, title, pos from authors_publis where author='Oscar Castillo') using(title);
 -- Does not work
 
-create type journal (
+create type journalType (
 series text,
 editor text,
 volume int,
@@ -109,7 +109,7 @@ title text,
 authors set<text>,
 pages map<text, int>,
 booktitle text,
-journal FROZEN<journal>,
+journal FROZEN<journalType>,
 url text,
 cites set<text>,
 PRIMARY KEY ((id), title)
@@ -129,6 +129,17 @@ select authors from publicationsNorm where title='Data Quality';
 
 select journal.series from publicationsNorm where title='Data Quality';
 select pages['end'] from publicationsNorm where title='Data Quality';
+
+CREATE OR REPLACE FUNCTION returnFirstValueInSet(input set<text>) 
+RETURNS NULL ON NULL INPUT RETURNS int LANGUAGE java AS '
+            String result = null;
+            if (input.size() > 0) {
+                result = input.iterator().next();
+                }
+            return result
+            ';
+select returnFirstValueInSet(authors) from publicationsNorm where title='Data Quality' ALLOW FILTERING;
+
 select authors[0] from publicationsNorm where title='Data Quality'; -- doesnt work yet
 
 select title, authors from publicationsNorm where authors contains 'Oscar Castillo' ALLOW FILTERING;
@@ -139,8 +150,65 @@ select title, pages['start'] from publicationsNorm where pages['end'] = 99 ALLOW
 
 select title, journal.series from publicationsNorm where journal CONTAINS 'Advances in Database Systems';
 
-alter table publicationsNorm rename column
+CREATE OR REPLACE FUNCTION returnFirstValueInSet(input set<text>) 
+RETURNS NULL ON NULL INPUT RETURNS int LANGUAGE java AS '
+            String result = null;
+            if (input.size() > 0) {
+                result = input.iterator().next();
+                }
+            return result
+            ';
 
 
+-- 
+CREATE MATERIALIZED VIEW IF NOT EXISTS dblp.journal_series
+AS SELECT title, journal.series
+FROM dblp.publicationsNorm;
+--
 
+--HARD QUERIES
+
+CREATE OR REPLACE FUNCTION avgState ( state tuple<int,bigint>, val int )
+CALLED ON NULL INPUT RETURNS tuple<int,bigint> LANGUAGE java
+AS 'if (val !=null) { state.setInt(0, state.getInt(0)+1);
+state.setLong(1, state.getLong(1)+val.intValue()); }
+return state;';
+
+CREATE OR REPLACE FUNCTION avgFinal ( state tuple<int,bigint> )
+CALLED ON NULL INPUT RETURNS double LANGUAGE java
+AS 'double r = 0;
+if (state.getInt(0) == 0) return null;
+r = state.getLong(1);
+r/= state.getInt(0);
+return Double.valueOf(r);';
+
+
+CREATE AGGREGATE IF NOT EXISTS average ( int )
+SFUNC avgState STYPE tuple<int,bigint>
+FINALFUNC avgFinal INITCOND (0,0);
+
+select average(pos) 
+from authors_publis 
+where author='Oscar Castillo';
+
+select average(pages_end-pages_start) 
+from authors_publis where author='Oscar Castillo';
+
+
+CREATE OR REPLACE FUNCTION countGroupState ( state map<text,int>, count text )
+CALLED ON NULL INPUT RETURNS map<text,int> LANGUAGE java
+AS 'Integer count = (Integer) state.get(type); 
+if (count == null) count = 1;
+ else count++;
+  state.put(type, count);
+return state; ' ;
+
+
+CREATE OR REPLACE AGGREGATE countGroup(text) 
+SFUNC countGroupState 
+STYPE map<text, int> 
+INITCOND {};
+
+
+-- Interesting blog http://www.batey.info/all
 
