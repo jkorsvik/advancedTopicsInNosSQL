@@ -209,6 +209,8 @@ SFUNC countGroupState
 STYPE map<text, int> 
 INITCOND {};
 
+select countGroup(author) from authors_publis;
+
 
 -- Interesting blog http://www.batey.info/all
 
