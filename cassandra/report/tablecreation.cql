@@ -1,5 +1,6 @@
 -- Move the data
 docker cp stocks_clean.csv cassandra:/
+docker cp insert_json.cql cassandra:/
 
 -- Namespace definition
 CREATE KEYSPACE IF NOT EXISTS stocks
@@ -45,3 +46,11 @@ weeks52highlow, analyst_recommendation,
 avg_true_rate, avg_vol, beta, change, 
 EPSttm, ROI, ratio, performance)
 FROM 'stocks_clean.csv' WITH HEADER = true AND DELIMITER=';';
+
+
+-- Had to use json
+-- delete all rows
+TRUNCATE stocks.stocks;
+
+-- insert rows
+source 'insert_json.cql';
