@@ -30,7 +30,7 @@ create TABLE stocks (
     ROI float,
     ratio map<text, float>,
     performance map<text, float>,
-    PRIMARY KEY ((id), earningsdate)
+    PRIMARY KEY ((id), price)
 );
 
 -- create indexs for the table
