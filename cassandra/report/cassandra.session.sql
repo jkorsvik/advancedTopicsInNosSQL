@@ -10,6 +10,8 @@ select avg(price) as average_price from stocks.stocks;
 
 
 -- @block simple3
+select count(*) from stocks.stocks 
+where description['Country'] = 'USA' ALLOW FILTERING;
 
 
 
@@ -30,37 +32,27 @@ select company, description['Country'] as country, description['Industry'] as in
 where id='5285380dbb1177ca391c2f9a';
 
 -- @block complex1
+-- Find mean price and stddev price for all stocks
+
 CREATE OR REPLACE FUNCTION stocks.sdState ( 
-    state tuple<int,double,double>, val double ) 
+    state tuple<int,double,double>, val float ) 
     CALLED ON NULL INPUT RETURNS tuple<int,double,double> 
-    LANGUAGE java AS '
-    int n = state.getInt(0);
-    double mean = state.getDouble(1);
-    double m2 = state.getDouble(2);
-    n++;
-    double delta = val - mean;
-    mean += delta / n;
-    m2 += delta * (val - mean);
-    state.setDouble(1, mean);
-    state.setDouble(2, m2);
-    return state;';
+    LANGUAGE java AS ' int n = state.getInt(0); double mean = state.getDouble(1); double m2 = state.getDouble(2); n++; double delta = val - mean; mean += delta / n; m2 += delta * (val - mean); state.setInt(0, n); state.setDouble(1, mean); state.setDouble(2, m2); return state;';
 
 CREATE OR REPLACE FUNCTION stocks.sdFinal ( 
     state tuple<int,double,double>) 
     CALLED ON NULL INPUT RETURNS double 
-    LANGUAGE java AS '
-    int n = state.getInt(0);
-    double mean = state.getDouble(1);
-    double m2 = state.getDouble(2);
-    return Math.sqrt(m2 / (n - 1));';
+    LANGUAGE java AS ' int n = state.getInt(0); double m2 = state.getDouble(2); if (n < 1) { return null; } return Math.sqrt(m2 / (n - 1));';
 
-CREATE AGGREGATE IF NOT EXISTS stocks.stddev (double)
-    SFUNC STYPE stocks.sdState,
-    ff FinalFunction = stocks.sdFinal,
-    initialState = tuple<int,double,double>(0,0,0)
-);
+CREATE OR REPLACE AGGREGATE stocks.stddev (float)
+    SFUNC sdState 
+    STYPE tuple<int,double,double> 
+    FINALFUNC sdFinal INITCOND (0, 0, 0);
 
-SELECT company, 
+
+SELECT count(*) as count,
+AVG(price) as mean_price, 
+stddev(price) as STD_price FROM stocks.stocks;
 
     
 
@@ -80,6 +72,9 @@ WHERE earningsdate IS NOT NULL AND id IS NOT NULL AND price IS NOT NULL
 PRIMARY KEY (id, price, earningsdate)
 WITH caching = { 'keys' : 'ALL', 'rows_per_partition' : '100' }
    AND comment = 'Based on table stocks.stocks' ;
+
+-- Get the data for the 10 first stocks of the clean MV
+select company, price, performance from stocks.company_price_and_performance limit 10;
 
 
 -- @block hard1
@@ -119,7 +114,7 @@ create TABLE stocks (
     ROI float,
     ratio map<text, float>,
     performance map<text, float>,
-    PRIMARY KEY (id, price)
+    PRIMARY KEY (id price)
 ) WITH CLUSTERING ORDER BY (price DESC);
 
 -- @block create index

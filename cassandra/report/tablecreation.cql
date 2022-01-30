@@ -30,13 +30,14 @@ create TABLE stocks (
     ROI float,
     ratio map<text, float>,
     performance map<text, float>,
-    PRIMARY KEY ((id), price)
-);
+    PRIMARY KEY (id price)
+) WITH CLUSTERING ORDER BY (price DESC);
 
--- create indexs for the table
-ALTER TABLE stocks WITH GC_GRACE_SECONDS = 0;
+-- @block create index
+ALTER TABLE stocks WITH GC_GRACE_SECONDS = 1;
 CREATE INDEX btree_stocks_id on stocks(id);
 CREATE INDEX btree_stocks_date on stocks(earningsdate);
+CREATE INDEX btree_stocks_price on stocks(price);
 
 
 -- Load the data
@@ -52,5 +53,5 @@ FROM 'stocks_clean.csv' WITH HEADER = true AND DELIMITER=';';
 -- delete all rows
 TRUNCATE stocks.stocks;
 
--- insert rows
+-- insert rows using json
 source 'insert_json.cql';

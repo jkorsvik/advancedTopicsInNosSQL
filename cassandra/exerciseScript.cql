@@ -195,16 +195,16 @@ select average(pages_end-pages_start)
 from authors_publis where author='Oscar Castillo';
 
 
-CREATE OR REPLACE FUNCTION countGroupState ( state map<text,int>, count text )
+CREATE OR REPLACE FUNCTION stocks.countGroupState ( state map<text,int>, count text )
 CALLED ON NULL INPUT RETURNS map<text,int> LANGUAGE java
-AS 'Integer count = (Integer) state.get(type); 
+AS 'Integer count = (Integer) state.get(count); 
 if (count == null) count = 1;
  else count++;
   state.put(type, count);
 return state; ' ;
 
 
-CREATE OR REPLACE AGGREGATE countGroup(text) 
+CREATE OR REPLACE AGGREGATE stocks.countGroup(text) 
 SFUNC countGroupState 
 STYPE map<text, int> 
 INITCOND {};
