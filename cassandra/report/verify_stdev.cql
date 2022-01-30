@@ -1,0 +1,12 @@
+CREATE TABLE one_to_ten (value double PRIMARY KEY);
+INSERT INTO one_to_ten (value) VALUES (1);
+INSERT INTO one_to_ten (value) VALUES (2);
+INSERT INTO one_to_ten (value) VALUES (3);
+INSERT INTO one_to_ten (value) VALUES (4);
+INSERT INTO one_to_ten (value) VALUES (5);
+INSERT INTO one_to_ten (value) VALUES (6);
+INSERT INTO one_to_ten (value) VALUES (7);
+INSERT INTO one_to_ten (value) VALUES (8);
+INSERT INTO one_to_ten (value) VALUES (9);
+INSERT INTO one_to_ten (value) VALUES (10);
+SELECT COUNT(*), AVG(value), STDEV(value) FROM one_to_ten;
