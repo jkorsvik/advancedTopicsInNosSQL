@@ -13,7 +13,7 @@ db.stocks.find({"description.Sector": 'Healthcare'}).count();
 db.stocks.distinct('description.Country');
 
 //--5-- Find the names of all companies in the Technology Sector that are in the USA
-db.stocks.find({"description.Sector":"Technology", "description.Country":"USA"}, {"company":1, "description.Sector":1, description.Country":1, "_id":0});
+db.stocks.find({"description.Sector":"Technology", "description.Country":"USA"}, {"company":1, "description.Sector":1, "description.Country":1, "_id":0});
                                                                                   
 //--6-- Get the price of Tesla stocks
 db.stocks.find({"company": "Tesla Motors, Inc."}, {"company":1, "price":1, "_id":0});
