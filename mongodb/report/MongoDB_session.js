@@ -67,7 +67,7 @@ db.stocks.aggregate(
 /*---------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 //Hard Query
-//--9--
+//--9-- Build an aggregation to see what the values traded in a year of the different sectors in countries are, for profitable businesses.
 
 const match_eps =  {
     $match: { EPSttm : { $gte : 0} }
