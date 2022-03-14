@@ -1,0 +1,6 @@
+## THIS ONE WAS USED FOR THE REPORT
+curl -XPUT localhost:9200/_bulk -H "Content-Type: application/json" --data-binary @insert_json.es
+
+
+## THIS ONE IS USED FOR THE MOVIES DATASET FROM THE LAB EXCERSISES
+curl -XPUT localhost:9200/_bulk -H "Content-Type: application/json" --data-binary @movies_elastic.json
