@@ -1,4 +1,4 @@
-// ELASTIC SEARCH FILE UTILIZING THE ELASTIC SEARCH EXTENSION
+// ELASTICSEARCH FILE UTILIZING THE ELASTICSEARCH EXTENSION
 // FOR VSCODE, ".es" File extension.
 // FIND SPECIFIC COMPANY WITH SPECIFIC PRICE
 GET /stocks/_search
@@ -26,7 +26,13 @@ GET /stocks/_search
 
 GET /stocks/_count
 
+GET /stocks/_search?q=Tesla
 
+
+GET /stocks/_stats
+
+
+GET /stocks/_search?q=fields.description.Country:Norway
 
 // FIND MIN AVG MAX OF PRICES GROUPED BY COUNTRIES
 GET /stocks/_search
@@ -150,4 +156,69 @@ GET /stocks/_search
         }
     },
     "size":0
+}
+
+
+PUT stocks
+{
+  "mappings": {
+    "fields": {
+      "properties": {              // <--- HERE!
+            "company": {
+              "type": "string"
+            },
+            "price": {
+              "type": "float"
+            }
+        }
+      }
+    }
+  }
+}
+
+GET /stocks/_search
+{
+    "query": {
+        "function_score": {
+            "query": {
+                "multi_match": {
+                    "query": "petrol",
+                    "fields": [
+                        "company",
+                        "description"
+                    ]
+                }
+            },
+            "field_value_factor": {
+                "field": "price",
+                "modifier": "log1p",
+                "factor": 2
+            }
+        }
+    }
+}
+
+GET /stocks/_search
+{
+    "size": 100,
+    "query": {
+        "function_score": {
+            "query": {
+                "multi_match": {
+                    "query": "Information",
+                    "fields": [
+                        "fields.company",
+                        "fields.description.Industry"
+                    ]
+                }
+            },
+            "functions": [
+                {
+                    "script_score": {
+                        "script": "return Math.log(1 + doc['fields.price'].value * doc['fields.avg_vol'].value);"
+                    }
+                }
+            ]
+        }
+    }
 }

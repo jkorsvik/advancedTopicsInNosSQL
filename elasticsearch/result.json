@@ -1,0 +1,156 @@
+{
+    "took": 9,
+    "timed_out": false,
+    "_shards": {
+        "total": 1,
+        "successful": 1,
+        "skipped": 0,
+        "failed": 0
+    },
+    "hits": {
+        "total": {
+            "value": 6756,
+            "relation": "eq"
+        },
+        "max_score": null,
+        "hits": []
+    },
+    "aggregations": {
+        "group_countries": {
+            "doc_count_error_upper_bound": 0,
+            "sum_other_doc_count": 238,
+            "buckets": [
+                {
+                    "key": "USA",
+                    "doc_count": 5914,
+                    "max_price": {
+                        "value": 173099.5
+                    },
+                    "min_price": {
+                        "value": 0.009999999776482582
+                    },
+                    "avg_price": {
+                        "value": 63.47855473483112
+                    }
+                },
+                {
+                    "key": "Canada",
+                    "doc_count": 176,
+                    "max_price": {
+                        "value": 149.33999633789062
+                    },
+                    "min_price": {
+                        "value": 0.029999999329447746
+                    },
+                    "avg_price": {
+                        "value": 18.616931875649076
+                    }
+                },
+                {
+                    "key": "China",
+                    "doc_count": 175,
+                    "max_price": {
+                        "value": 159.00999450683594
+                    },
+                    "min_price": {
+                        "value": 0.03999999910593033
+                    },
+                    "avg_price": {
+                        "value": 13.54794278432216
+                    }
+                },
+                {
+                    "key": "Israel",
+                    "doc_count": 65,
+                    "max_price": {
+                        "value": 87.69000244140625
+                    },
+                    "min_price": {
+                        "value": 0.17000000178813934
+                    },
+                    "avg_price": {
+                        "value": 14.22615382556732
+                    }
+                },
+                {
+                    "key": "Bermuda",
+                    "doc_count": 42,
+                    "max_price": {
+                        "value": 598.1199951171875
+                    },
+                    "min_price": {
+                        "value": 2.200000047683716
+                    },
+                    "avg_price": {
+                        "value": 50.80880904197693
+                    }
+                },
+                {
+                    "key": "United Kingdom",
+                    "doc_count": 42,
+                    "max_price": {
+                        "value": 129.0500030517578
+                    },
+                    "min_price": {
+                        "value": 3.069999933242798
+                    },
+                    "avg_price": {
+                        "value": 39.36195136861103
+                    }
+                },
+                {
+                    "key": "Brazil",
+                    "doc_count": 31,
+                    "max_price": {
+                        "value": 48.5099983215332
+                    },
+                    "min_price": {
+                        "value": 1.600000023841858
+                    },
+                    "avg_price": {
+                        "value": 15.139677370748212
+                    }
+                },
+                {
+                    "key": "Netherlands",
+                    "doc_count": 25,
+                    "max_price": {
+                        "value": 189.60000610351562
+                    },
+                    "min_price": {
+                        "value": 0.8899999856948853
+                    },
+                    "avg_price": {
+                        "value": 40.463999981880185
+                    }
+                },
+                {
+                    "key": "Greece",
+                    "doc_count": 24,
+                    "max_price": {
+                        "value": 28.209999084472656
+                    },
+                    "min_price": {
+                        "value": 0.3100000023841858
+                    },
+                    "avg_price": {
+                        "value": 7.245833272735278
+                    }
+                },
+                {
+                    "key": "Japan",
+                    "doc_count": 24,
+                    "max_price": {
+                        "value": 281.1499938964844
+                    },
+                    "min_price": {
+                        "value": 4.320000171661377
+                    },
+                    "avg_price": {
+                        "value": 39.08583309253057
+                    }
+                }
+            ]
+        }
+    }
+}
