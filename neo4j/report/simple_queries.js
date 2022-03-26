@@ -1,9 +1,9 @@
 //Simple Queries
 
-//--1-- Find the number of all companies that contain 'Inc.' in their name.
+//--1-- Find the number of all companies that contain 'Inc.' in their name, using regex.
 
 MATCH (a:Stocks)
-WHERE a.company CONTAINS "Inc."
+WHERE a.company =~ ".*Inc.*"
 RETURN COUNT(a.company) AS number
 
 //-- 2 -- Find the country, the sector and the industry of Tesla.
