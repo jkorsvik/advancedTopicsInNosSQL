@@ -47,3 +47,13 @@ RETURN n.company, n.price, b.country ORDER BY n.price DESC limit 10
 //--2-- Find mean price and stddev price for all stocks
 MATCH (n:Stocks)
 RETURN avg(toFloat(n.price)), stDev(toFloat(n.price)) 
+
+
+//Hard query
+
+
+//--1-- Graph all the companies which have the same id
+
+MATCH p = (d:Description) <-- (:Stocks)
+WHERE EXISTS (d.country)
+RETURN p
