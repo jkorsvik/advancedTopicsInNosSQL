@@ -10,7 +10,7 @@ days50highlow:l.days50highlow, weeks52highlow:l.weeks52highlow, analyst_recommen
 avg_true_rate:toFloat(l.avg_true_rate), avg_vol:toFloat(l.avg_vol), beta:toFloat(l.beta),
 change:toFloat(l.change), EPSttm:toFloat(l.EPSttm), ROI:toFloat(l.ROI),
 ratio:l.ratio, performance:l.performance})
-CREATE (stocks_clean) -[:descripted]-> (description);
+CREATE (stocks_clean) -[:has_country]-> (description);
 
 
 //If you have already created a Stocks node use this code to delete before creating a new one
