@@ -38,12 +38,12 @@ RETURN d, c, s
 
 //Complex Queries
 
-//--1-- Get the name, price and Industry of the top 10 least valuable companies in the United States 
+//--1-- Get the name, price and Industry of the top 10 most valuable companies in the United States 
 
-MATCH (n:Stocks), (b:Description)
-where n.price is not null  and b.country='USA'
-RETURN n.company, n.price, b.country  ORDER BY n.price  limit 10
+MATCH (n:Stocks) --> (b:Description)
+where n.price is not null and b.country='USA'
+RETURN n.company, n.price, b.country ORDER BY n.price DESC limit 10
 
 //--2-- Find mean price and stddev price for all stocks
 MATCH (n:Stocks)
-RETURN avg(toInteger(n.price)), stDev(toInteger(n.price)) 
+RETURN avg(toFloat(n.price)), stDev(toFloat(n.price)) 
