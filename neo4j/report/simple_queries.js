@@ -9,7 +9,7 @@ RETURN COUNT(a.company) AS number
 //-- 2 -- Find the country, the sector, the industry and the id of Tesla.
 
 MATCH (a:Stocks{company:"Tesla Motors, Inc."}) --> (b:Description)
-RETURN a.company AS company, b.country AS country, b.sector AS sector, b.industry, b.id AS industry
+RETURN a.company AS company, b.country AS country, b.sector AS sector, b.industry, b.id AS id
 
 //-- 3 -- Find the names of all companies in the Technology Sector that are in the USA.
 
