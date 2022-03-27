@@ -30,4 +30,17 @@ MATCH (a:Stocks)
 WHERE toFloat(a.price) > 1000
 RETURN a.company, a.price
 
-//-- 6 to be continued...
+//-- 6 -- Get the price of Tesla stocks
+
+MATCH(a:Stocks)
+WHERE a.company ='Tesla Motors, Inc.'
+RETURN  a.price, a.company LIMIT 10
+
+
+//Complex Queries
+
+//--1-- Get the name, price and Industry of the top 10 most valuable companies in the United States 
+
+
+
+//--2-- Get the average price of stocks for each sector in the USA
