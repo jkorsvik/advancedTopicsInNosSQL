@@ -6,35 +6,34 @@ MATCH (a:Stocks)
 WHERE a.company =~ ".*Inc.*"
 RETURN COUNT(a.company) AS number
 
-//-- 2 -- Find the country, the sector and the industry of Tesla.
+//-- 2 -- Find the country, the sector, the industry and the id of Tesla.
 
-MATCH (a:Stocks{company:"Tesla Motors, Inc."}) MATCH (b:Description)
-WHERE toInteger(a.desc_id) = b.id
-RETURN a.company AS company, b.country AS country, b.sector AS sector, b.industry AS industry
+MATCH (a:Stocks{company:"Tesla Motors, Inc."}) --> (b:Description)
+RETURN a.company AS company, b.country AS country, b.sector AS sector, b.industry, b.id AS industry
 
 //-- 3 -- Find the names of all companies in the Technology Sector that are in the USA.
 
-MATCH (a:Stocks) MATCH (b:Description{country:"USA"})
-WHERE toInteger(a.desc_id) = b.id AND b.sector CONTAINS  "Technology"
-RETURN a.company, b.country, b.sector LIMIT 10
+MATCH (d:Description{country:"USA"}) <-- (s:Stocks)
+WHERE d.sector = "Technology"
+RETURN s.company, d.country, d.sector
 
 //-- 4 -- Find the names, sectors, industries and countries of all companies whose name begins with "Alc" (there are only 3).
 
-MATCH (a:Description) MATCH (b:Stocks)
-WHERE toInteger(b.desc_id) = a.id AND b.company STARTS WITH 'Alc'
+MATCH (a:Description) <-- (b:Stocks)
+WHERE b.company STARTS WITH 'Alc'
 RETURN b.company AS name, a.country AS country, a.sector AS sector, a.industry AS industry
 
 //-- 5 -- Find the names of all companies whose stock price is greater than 1000 (there are only 4).
 
 MATCH (a:Stocks)
-WHERE toFloat(a.price) > 1000
-RETURN a.company, a.price
+WHERE a.price > 1000
+RETURN a.company, a.price ORDER BY a.price DESC
 
-//-- 6 -- Get the price of Tesla stocks
+// -- 6 -- As we saw earlier, Tesla's id is 1501. Now let's find the graph of all the companies that have the same id (i.e.: same country, same industry and same sector)
 
-MATCH(a:Stocks)
-WHERE a.company ='Tesla Motors, Inc.'
-RETURN  a.price, a.company LIMIT 10
+MATCH (d:Description) <-[c:has_country]- (s:Stocks)
+WHERE d.id = 1501
+RETURN d, c, s
 
 
 //Complex Queries
